@@ -21,6 +21,7 @@ const sampleTransactions = [
     date: "15 мая 2025",
     category: "Доход",
     type: "income" as const,
+    description: "Ежемесячная зарплата за апрель",
   },
   {
     id: "2",
@@ -29,6 +30,7 @@ const sampleTransactions = [
     date: "12 мая 2025",
     category: "Продукты",
     type: "expense" as const,
+    description: "Покупка продуктов в Пятёрочке",
   },
   {
     id: "3",
@@ -37,6 +39,7 @@ const sampleTransactions = [
     date: "10 мая 2025",
     category: "Развлечения",
     type: "expense" as const,
+    description: "Ужин с друзьями",
   },
   {
     id: "4",
@@ -45,6 +48,7 @@ const sampleTransactions = [
     date: "08 мая 2025",
     category: "Дополнительный доход",
     type: "income" as const,
+    description: "Верстка сайта для заказчика",
   },
   {
     id: "5",
@@ -53,6 +57,7 @@ const sampleTransactions = [
     date: "05 мая 2025",
     category: "Жилье",
     type: "expense" as const,
+    description: "Оплата ЖКХ за апрель",
   },
   {
     id: "6",
@@ -61,6 +66,7 @@ const sampleTransactions = [
     date: "04 мая 2025",
     category: "Транспорт",
     type: "expense" as const,
+    description: "Поездка до работы",
   },
   {
     id: "7",
@@ -69,6 +75,7 @@ const sampleTransactions = [
     date: "03 мая 2025",
     category: "Развлечения",
     type: "expense" as const,
+    description: "Ежемесячная подписка на стриминговый сервис",
   },
   {
     id: "8",
@@ -77,6 +84,7 @@ const sampleTransactions = [
     date: "01 мая 2025",
     category: "Прочее",
     type: "income" as const,
+    description: "Алексей вернул долг",
   },
 ];
 

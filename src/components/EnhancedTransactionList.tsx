@@ -1,10 +1,16 @@
-
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Icon from "@/components/ui/icon";
-import TransactionFilters, { FilterOptions } from './TransactionFilters';
+import TransactionFilters, { FilterOptions } from "./TransactionFilters";
 import { Button } from "@/components/ui/button";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 export interface Transaction {
   id: string;
@@ -12,7 +18,7 @@ export interface Transaction {
   amount: number;
   date: string;
   category: string;
-  type: 'income' | 'expense';
+  type: "income" | "expense";
   description?: string;
 }
 
@@ -33,7 +39,7 @@ const EnhancedTransactionList: React.FC<EnhancedTransactionListProps> = ({
   isLoading = false,
   onViewAll,
   onEdit,
-  onDelete
+  onDelete,
 }) => {
   // Состояние фильтров
   const [filters, setFilters] = useState<FilterOptions>({
@@ -42,35 +48,43 @@ const EnhancedTransactionList: React.FC<EnhancedTransactionListProps> = ({
     dateRange: undefined,
     searchQuery: "",
     minAmount: "",
-    maxAmount: ""
+    maxAmount: "",
   });
 
   // Состояние раскрытия фильтров
   const [filtersExpanded, setFiltersExpanded] = useState(false);
-  
+
   // Состояние пагинации
   const [currentPage, setCurrentPage] = useState(1);
 
   // Получение уникальных категорий из транзакций
   const categories = useMemo(() => {
-    return Array.from(new Set(transactions.map(t => t.category)));
+    return Array.from(new Set(transactions.map((t) => t.category)));
   }, [transactions]);
 
   // Применение фильтров к транзакциям
   const filteredTransactions = useMemo(() => {
-    return transactions.filter(transaction => {
+    return transactions.filter((transaction) => {
       // Фильтр по типу
       if (filters.type !== "all" && transaction.type !== filters.type) {
         return false;
       }
 
       // Фильтр по категории
-      if (filters.category !== "all" && transaction.category !== filters.category) {
+      if (
+        filters.category !== "all" &&
+        transaction.category !== filters.category
+      ) {
         return false;
       }
 
       // Фильтр по поисковому запросу
-      if (filters.searchQuery && !transaction.title.toLowerCase().includes(filters.searchQuery.toLowerCase())) {
+      if (
+        filters.searchQuery &&
+        !transaction.title
+          .toLowerCase()
+          .includes(filters.searchQuery.toLowerCase())
+      ) {
         return false;
       }
 
@@ -87,16 +101,19 @@ const EnhancedTransactionList: React.FC<EnhancedTransactionListProps> = ({
       // Фильтр по диапазону дат
       if (filters.dateRange?.from || filters.dateRange?.to) {
         const transactionDate = new Date(transaction.date);
-        
-        if (filters.dateRange.from && transactionDate < filters.dateRange.from) {
+
+        if (
+          filters.dateRange.from &&
+          transactionDate < filters.dateRange.from
+        ) {
           return false;
         }
-        
+
         if (filters.dateRange.to) {
           // Устанавливаем конец дня для to даты, чтобы включить весь день
           const toDateEnd = new Date(filters.dateRange.to);
           toDateEnd.setHours(23, 59, 59, 999);
-          
+
           if (transactionDate > toDateEnd) {
             return false;
           }
@@ -135,7 +152,7 @@ const EnhancedTransactionList: React.FC<EnhancedTransactionListProps> = ({
       dateRange: undefined,
       searchQuery: "",
       minAmount: "",
-      maxAmount: ""
+      maxAmount: "",
     });
     setCurrentPage(1);
   };
@@ -147,26 +164,31 @@ const EnhancedTransactionList: React.FC<EnhancedTransactionListProps> = ({
           {title}
           {filteredTransactions.length > 0 && (
             <span className="ml-2 text-sm font-normal text-muted-foreground">
-              ({filteredTransactions.length} {filteredTransactions.length === 1 ? 'запись' : 
-                filteredTransactions.length < 5 ? 'записи' : 'записей'})
+              ({filteredTransactions.length}{" "}
+              {filteredTransactions.length === 1
+                ? "запись"
+                : filteredTransactions.length < 5
+                  ? "записи"
+                  : "записей"}
+              )
             </span>
           )}
         </CardTitle>
-        
+
         <div className="flex gap-2">
-          <Button 
-            variant="ghost" 
-            size="sm" 
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => setFiltersExpanded(!filtersExpanded)}
           >
             <Icon name="SlidersHorizontal" size={16} className="mr-1" />
             Фильтры
           </Button>
-          
+
           {onViewAll && (
-            <Button 
-              variant="ghost" 
-              size="sm" 
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={onViewAll}
               className="text-violet-500 hover:text-violet-600 hover:bg-violet-50"
             >
@@ -175,16 +197,16 @@ const EnhancedTransactionList: React.FC<EnhancedTransactionListProps> = ({
           )}
         </div>
       </CardHeader>
-      
+
       <CardContent>
-        <TransactionFilters 
+        <TransactionFilters
           onFilterChange={handleFilterChange}
           categories={categories}
           onClearFilters={handleClearFilters}
           isExpanded={filtersExpanded}
           toggleExpand={() => setFiltersExpanded(!filtersExpanded)}
         />
-        
+
         {isLoading ? (
           <div className="flex flex-col gap-4">
             {[1, 2, 3].map((i) => (
@@ -204,9 +226,11 @@ const EnhancedTransactionList: React.FC<EnhancedTransactionListProps> = ({
               <Icon name="Search" size={32} className="opacity-40" />
             </div>
             <p>Транзакций не найдено</p>
-            {Object.values(filters).some(v => v !== "all" && v !== "" && v !== undefined) && (
-              <Button 
-                variant="link" 
+            {Object.values(filters).some(
+              (v) => v !== "all" && v !== "" && v !== undefined,
+            ) && (
+              <Button
+                variant="link"
                 onClick={handleClearFilters}
                 className="mt-2 text-violet-500"
               >
@@ -218,54 +242,80 @@ const EnhancedTransactionList: React.FC<EnhancedTransactionListProps> = ({
           <>
             <div className="space-y-4 mb-4">
               {paginatedTransactions.map((transaction) => (
-                <div 
-                  key={transaction.id} 
+                <div
+                  key={transaction.id}
                   className="flex items-center justify-between py-3 px-4 border border-border rounded-lg hover:bg-muted/30 transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      transaction.type === 'income' ? 'bg-green-100' : 'bg-red-100'
-                    }`}>
-                      <Icon 
-                        name={transaction.type === 'income' ? 'ArrowDownLeft' : 'ArrowUpRight'} 
-                        className={transaction.type === 'income' ? 'text-green-600' : 'text-red-600'} 
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        transaction.type === "income"
+                          ? "bg-green-100"
+                          : "bg-red-100"
+                      }`}
+                    >
+                      <Icon
+                        name={
+                          transaction.type === "income"
+                            ? "ArrowDownLeft"
+                            : "ArrowUpRight"
+                        }
+                        className={
+                          transaction.type === "income"
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }
                       />
                     </div>
                     <div>
-                      <p className="font-medium">{transaction.title}</p>
+                      <p className="font-medium text-foreground">
+                        {transaction.title}
+                      </p>
                       <p className="text-xs text-muted-foreground">
                         <span className="inline-flex items-center bg-muted px-1.5 py-0.5 rounded text-xs font-medium mr-1">
                           {transaction.category}
                         </span>
                         {transaction.date}
                       </p>
+                      {transaction.description && (
+                        <p className="text-xs text-muted-foreground mt-0.5 italic max-w-[250px] truncate">
+                          {transaction.description}
+                        </p>
+                      )}
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-2">
-                    <span className={`font-medium ${
-                      transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
-                    }`}>
-                      {transaction.type === 'income' ? '+' : '-'} 
-                      {new Intl.NumberFormat('ru-RU').format(transaction.amount)} ₽
+                    <span
+                      className={`font-medium ${
+                        transaction.type === "income"
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {transaction.type === "income" ? "+" : "-"}
+                      {new Intl.NumberFormat("ru-RU").format(
+                        transaction.amount,
+                      )}{" "}
+                      ₽
                     </span>
-                    
+
                     <div className="flex items-center ml-2">
                       {onEdit && (
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
+                        <Button
+                          variant="ghost"
+                          size="icon"
                           className="h-8 w-8 text-muted-foreground hover:text-foreground"
                           onClick={() => onEdit(transaction)}
                         >
                           <Icon name="Pencil" size={16} />
                         </Button>
                       )}
-                      
+
                       {onDelete && (
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
+                        <Button
+                          variant="ghost"
+                          size="icon"
                           className="h-8 w-8 text-muted-foreground hover:text-red-500"
                           onClick={() => onDelete(transaction.id)}
                         >
@@ -277,32 +327,46 @@ const EnhancedTransactionList: React.FC<EnhancedTransactionListProps> = ({
                 </div>
               ))}
             </div>
-            
+
             {totalPages > 1 && (
               <Pagination className="mt-4">
                 <PaginationContent>
                   <PaginationItem>
-                    <PaginationPrevious 
-                      onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-                      className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                    <PaginationPrevious
+                      onClick={() =>
+                        handlePageChange(Math.max(1, currentPage - 1))
+                      }
+                      className={
+                        currentPage === 1
+                          ? "pointer-events-none opacity-50"
+                          : ""
+                      }
                     />
                   </PaginationItem>
-                  
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <PaginationItem key={page}>
-                      <PaginationLink 
-                        isActive={page === currentPage}
-                        onClick={() => handlePageChange(page)}
-                      >
-                        {page}
-                      </PaginationLink>
-                    </PaginationItem>
-                  ))}
-                  
+
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => (
+                      <PaginationItem key={page}>
+                        <PaginationLink
+                          isActive={page === currentPage}
+                          onClick={() => handlePageChange(page)}
+                        >
+                          {page}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ),
+                  )}
+
                   <PaginationItem>
-                    <PaginationNext 
-                      onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-                      className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                    <PaginationNext
+                      onClick={() =>
+                        handlePageChange(Math.min(totalPages, currentPage + 1))
+                      }
+                      className={
+                        currentPage === totalPages
+                          ? "pointer-events-none opacity-50"
+                          : ""
+                      }
                     />
                   </PaginationItem>
                 </PaginationContent>
